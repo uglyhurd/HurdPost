@@ -12,7 +12,11 @@ public class Like {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "id")
@@ -26,7 +30,7 @@ public class Like {
     @CreationTimestamp
     private Date created_at;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
