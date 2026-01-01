@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -45,9 +47,62 @@ public class User {
     @Column(name = "role", columnDefinition = "VARCHAR(40) DEFAULT 'USER'")
     private String role;
 
+    @OneToMany(mappedBy = "follower")
+    private List<Follower> follower = new ArrayList<>();
+
+    @OneToMany(mappedBy = "following")
+    private List<Follower> following = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
+
+    public List<Follower> getFollower() {
+        return follower;
+    }
+
+    public User(long id, String name, String username, String password,
+                String email, String profilePictureUrl, String bio,
+                Date created_at, String role, List<Follower> follower,
+                List<Follower> following, List<Post> posts) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        ProfilePictureUrl = profilePictureUrl;
+        this.bio = bio;
+        this.created_at = created_at;
+        this.role = role;
+        this.follower = follower;
+        this.following = following;
+        this.posts = posts;
+    }
+
+    public void setFollower(List<Follower> follower) {
+        this.follower = follower;
+    }
+
+    public List<Follower> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<Follower> following) {
+        this.following = following;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
     public long getId() {
         return id;
     }
+
+
 
     public User(long id, String name, String username, String password, String email,
                 String profilePictureUrl, String bio, Date created_at, String role) {
