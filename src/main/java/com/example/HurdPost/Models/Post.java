@@ -14,6 +14,11 @@ public class Post {
     private User user;
 
 
+    public Post(int id, User user) {
+        this.id = id;
+        this.user = user;
+    }
 
-
+    public Post() {
+    }
 }
