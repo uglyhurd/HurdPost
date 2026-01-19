@@ -14,6 +14,24 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", ProfilePictureUrl='" + ProfilePictureUrl + '\'' +
+                ", bio='" + bio + '\'' +
+                ", created_at=" + created_at +
+                ", role='" + role + '\'' +
+                ", follower=" + follower +
+                ", following=" + following +
+                ", posts=" + posts +
+                '}';
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
