@@ -1,4 +1,4 @@
-package com.example.HurdPost.Services;
+package com.example.HurdPost.Security;
 
 
 import com.example.HurdPost.Models.User;
