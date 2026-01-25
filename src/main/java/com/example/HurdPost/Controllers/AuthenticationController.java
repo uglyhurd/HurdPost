@@ -65,8 +65,8 @@ public class AuthenticationController {
     public String finishCreate(@ModelAttribute("user") User user,
                              BindingResult bindingResult){
 
-        if(bindingResult.hasErrors())
-            return "/auth/register";
+//        if(bindingResult.hasErrors())
+//            return "/auth/register";
 
 
         authService.createUser(user);

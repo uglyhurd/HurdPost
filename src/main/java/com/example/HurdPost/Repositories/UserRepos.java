@@ -10,6 +10,6 @@ import java.util.function.Function;
 
 public interface UserRepos extends JpaRepository<User, Integer> {
 
-    Optional<User> findByName(String name);
+    Optional<User> findByUsername(String name);
 
 }
