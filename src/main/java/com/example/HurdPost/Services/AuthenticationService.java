@@ -28,7 +28,7 @@ public class AuthenticationService {
         System.out.println(user.getUsername());
         user.setPassword(passwordEncoded);
         user.setCreated_at(new Date());
-        user.setPassword("ROLE_USER");
+        user.setRole("ROLE_USER");
         userRepos.save(user);
 
     }

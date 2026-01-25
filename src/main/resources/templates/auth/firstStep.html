@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:action="@{/auth/register}" th:method="POST" th:object="${user}">
+<form th:action="@{/auth/finishReg}" th:method="POST" th:object="${user}">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
 
