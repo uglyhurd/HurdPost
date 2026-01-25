@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>posts</title>
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body style="text-align: center">
 
 <h1 style="font-size: 30px">Лента:</h1>
+
+<div style="position: fixed; top: 20px; right: 20px; border:solid 1px;border-radius: 40px; padding: 10px" class="dropdown">
+    <a th:href="@{/{username}(username=${user.getUsername()})}">Мой профиль</a>
+<!--    <div class="dropdown-content">-->
+<!--        <a th:href="@{/booking/allBooking}">Все бронирования</a>-->
+<!--        <hr>-->
+<!--        <a th:href="@{/booking/allRooms}" style="padding-bottom: 20px">Все комнаты</a>-->
+<!--    </div>-->
+</div>
+
 
 </body>
 </html>
