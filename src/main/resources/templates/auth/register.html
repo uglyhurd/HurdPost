@@ -11,16 +11,29 @@
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <label for="username">Введите имя пользователя:</label>
     <input type="text" id="username" th:field="${user.username}" required>
+    <div th:if="${#fields.hasErrors('username')}" style="color: red">
+        <p th:errors="*{username}"></p>
+    </div>
+    <br/>
+    <br/>
     <label for="email">Введите почту:</label>
     <input type="text" id="email" th:field="${user.email}" required>
+    <div th:if="${#fields.hasErrors('email')}" style="color: red">
+        <p th:errors="*{email}"></p>
+    </div>
+    <br/>
     <label for="password">Введите пароль:</label>
+
     <input type="password" id="password" th:field="${user.password}" required>
+    <br/>
 
     <div th:if="${param.error}" style="color: red">
 
         <p>Введите корректные данные!</p>
 
     </div>
+
+
 
     <input type="submit" value="Продолжить">
 </form>
