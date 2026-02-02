@@ -1,24 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>posts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лента | HurdPost</title>
     <link rel="stylesheet" href="/style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@300;400;600;700&family=Geologica:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-<body style="text-align: center">
+<body class="posts-page">
+<!-- Header -->
+<header class="main-header">
+    <div class="header-container">
+        <div class="header-left">
+            <h1 class="logo-text">HurdPost</h1>
+        </div>
 
-<h1 style="font-size: 30px">Лента:</h1>
+        <nav class="header-nav">
+            <a href="#" class="nav-link active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor"/>
+                </svg>
+                <span>Лента</span>
+            </a>
+            <a href="#" class="nav-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Исследовать</span>
+            </a>
+        </nav>
 
-<div style="position: fixed; top: 20px; right: 20px; padding: 10px" class="dropdown">
-<!--    <a th:href="@{/{username}(username=${user.getUsername()})}">Мой профиль</a>-->
-    <a href="#"><img th:src="@{/images/profile.png}" alt="User" width="40px" height="40px" style="padding: 3px 5px;"
-         class="profile-user"></a>
-    <div class="dropdown-content">
-        <a th:href="@{/myProfile/{id}(id=${user.getId()})}">Мой профиль</a>
+        <div class="header-right">
+            <button class="btn btn-new-post">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Создать
+            </button>
 
+            <div class="user-menu">
+                <button class="user-avatar">
+                    <img th:src="@{/images/profile.png}" alt="User" width="40" height="40">
+                </button>
+                <div class="user-dropdown">
+                    <div class="dropdown-header">
+                        <p class="user-name" th:text="${user.name}">Имя пользователя</p>
+                        <p class="user-username" th:text="'@' + ${user.username}">@username</p>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a th:href="@{/myProfile/{id}(id=${user.getId()})}" class="dropdown-item">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Мой профиль
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
+                            <path d="M10 6v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Настройки
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/logout" class="dropdown-item danger">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M13 16l4-4-4-4M17 12H9M9 2H5a2 2 0 00-2 2v12a2 2 0 002 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</header>
 
+<!-- Main content -->
+<main class="main-content">
+    <div class="feed-container">
+        <div class="feed-header">
+            <h2>Ваша лента</h2>
+            <div class="feed-filters">
+                <button class="filter-btn active">Все</button>
+                <button class="filter-btn">Популярное</button>
+                <button class="filter-btn">Новое</button>
+            </div>
+        </div>
 
+        <!-- Empty state -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                    <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="3" opacity="0.2"/>
+                    <path d="M40 25v30M25 40h30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Здесь пока пусто</h3>
+            <p>Будьте первым, кто создаст пост!</p>
+            <button class="btn btn-primary">Создать первый пост</button>
+        </div>
+
+        <!-- Post cards will be dynamically loaded here -->
+        <!-- Example post card structure for future use:
+        <article class="post-card">
+            <div class="post-header">
+                <img src="/images/profile.png" alt="User" class="post-avatar">
+                <div class="post-meta">
+                    <h3 class="post-author">Имя пользователя</h3>
+                    <p class="post-time">2 часа назад</p>
+                </div>
+            </div>
+            <div class="post-content">
+                <p>Содержимое поста...</p>
+            </div>
+            <div class="post-actions">
+                <button class="action-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 17l-6-6h4V3h4v8h4l-6 6z" fill="currentColor"/>
+                    </svg>
+                    <span>12</span>
+                </button>
+                <button class="action-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7 9l3 3 6-6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span>45</span>
+                </button>
+                <button class="action-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M17 8h-6l2-4H6L4 12h6l-2 4z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </article>
+        -->
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <h3>Популярные теги</h3>
+            <div class="tags-list">
+                <a href="#" class="tag">#дизайн</a>
+                <a href="#" class="tag">#разработка</a>
+                <a href="#" class="tag">#технологии</a>
+                <a href="#" class="tag">#искусство</a>
+                <a href="#" class="tag">#фото</a>
+                <a href="#" class="tag">#путешествия</a>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <h3>Рекомендации</h3>
+            <div class="recommendations">
+                <p class="empty-text">Подписывайтесь на интересных авторов, чтобы видеть рекомендации</p>
+            </div>
+        </div>
+    </aside>
+</main>
+
+<script>
+    // User menu dropdown
+    document.querySelector('.user-avatar').addEventListener('click', function() {
+        document.querySelector('.user-dropdown').classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-menu')) {
+            document.querySelector('.user-dropdown').classList.remove('show');
+        }
+    });
+</script>
 </body>
 </html>
