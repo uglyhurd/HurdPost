@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+
+<div style="position: fixed; text-align: center; padding: 10px">
+    <!--    <a th:href="@{/{username}(username=${user.getUsername()})}">Мой профиль</a>-->
+    <a href="#"><img th:src="@{/images/profile.png}" alt="User" width="400px" height="400px" style="padding: 3px 5px;"
+                     class="profile-user"></a>
+    <p th:text="${user.name}"></p>
+    <p th:text="${user.username}"></p>
+    <p th:text="${user.bio}"></p>
+
+</div>
+
+
+
+</body>
+</html>
