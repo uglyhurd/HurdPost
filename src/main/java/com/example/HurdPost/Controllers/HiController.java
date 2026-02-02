@@ -1,17 +1,16 @@
 package com.example.HurdPost.Controllers;
 
+import com.example.HurdPost.Models.Post;
 import com.example.HurdPost.Models.User;
 import com.example.HurdPost.Repositories.UserRepos;
 import com.example.HurdPost.Security.PersonDetails;
+import com.example.HurdPost.Services.PostService;
 import com.example.HurdPost.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -21,10 +20,12 @@ public class HiController {
 
     private final UserService userService;
     private final UserRepos userRepos;
+    private final PostService postService;
     @Autowired
-    public HiController(UserService userService, UserRepos userRepos) {
+    public HiController(UserService userService, UserRepos userRepos, PostService postService) {
         this.userService = userService;
         this.userRepos = userRepos;
+        this.postService = postService;
     }
 
 
@@ -38,6 +39,7 @@ public class HiController {
 //            model.addAttribute("user", null);
 
         model.addAttribute("user", user);
+        model.addAttribute("allPosts", postService.getAllPosts());
         return "auth/posts/posts";
     }
 
@@ -46,9 +48,32 @@ public class HiController {
 
         model.addAttribute("user", userService.getUserById(id));
 
+        model.addAttribute("userPosts", postService.getPostsByUserId(id));
         return "auth/posts/profile";
     }
 
+
+    @GetMapping("/createPost")
+    public String createPost(Model model, @AuthenticationPrincipal PersonDetails personDetails){
+
+        Optional<User> user = userRepos.findByUsername(personDetails.getUsername());
+
+        model.addAttribute("user", user.get());
+        model.addAttribute("post", new Post());
+        return "auth/posts/createPost";
+    }
+
+    @PostMapping("/createPost/getPost")
+    public String getPost(@ModelAttribute("post") Post post, @AuthenticationPrincipal PersonDetails personDetails,
+                          Model model){
+
+        Optional<User> user = userRepos.findByUsername(personDetails.getUsername());
+
+        post.setUser(user.get());
+        postService.savePost(post);
+
+        return "redirect:/posts";
+    }
 
 
 }
