@@ -1,29 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | HurdPost</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@300;400;600;700&family=Geologica:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="auth-page">
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="logo-text">HurdPost</h1>
+            <p class="auth-subtitle">Добро пожаловать обратно</p>
+        </div>
 
+        <form action="/process_login" method="post" name="f" class="auth-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-<form action="/process_login" method="post" name="f">
+            <div class="form-group">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-input"
+                        placeholder="Введите ваш логин"
+                        required
+                >
+            </div>
 
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    <label for="username">Введите имя пользователя: </label>
-    <input type="text" id="username" name="username">
-    <label for="password">Введите пароль: </label>
-    <input type="password" id="password" name="password">
-    <br/>
-    <input type="submit" value="Войти">
+            <div class="form-group">
+                <label for="password" class="form-label">Пароль</label>
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input"
+                        placeholder="Введите ваш пароль"
+                        required
+                >
+            </div>
 
-    <div th:if="${param.error}" style="color: red">
-       <p>Неправильный логин или пароль!</p>
+            <div th:if="${param.error}" class="error-message">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/>
+                    <path d="M10 6V10M10 14H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <p>Неправильный логин или пароль!</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Войти
+                <span class="btn-arrow">→</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Нет аккаунта?</p>
+            <a th:href="@{/auth/createUser}" class="link-accent">Создать аккаунт</a>
+        </div>
     </div>
 
-</form>
-<br/>
-<a th:href="@{/auth/createUser}">Создать аккаунт</a>
-
+    <div class="decorative-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+</div>
 </body>
 </html>
