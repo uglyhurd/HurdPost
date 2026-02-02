@@ -64,12 +64,15 @@
                         Настройки
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="/logout" class="dropdown-item danger">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M13 16l4-4-4-4M17 12H9M9 2H5a2 2 0 00-2 2v12a2 2 0 002 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        Выйти
-                    </a>
+                    <form th:action="@{/logout}" th:method="POST">
+                        <input th:href="@{/logout}" class="dropdown-item danger" type="submit" value="Выйти">
+<!--                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">-->
+<!--                                <path d="M13 16l4-4-4-4M17 12H9M9 2H5a2 2 0 00-2 2v12a2 2 0 002 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>-->
+<!--                            </svg>-->
+
+                        </input>
+                    </form>
+
                 </div>
             </div>
         </div>
