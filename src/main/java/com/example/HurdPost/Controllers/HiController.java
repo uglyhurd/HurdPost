@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -51,22 +52,32 @@ public class HiController {
 //        model.addAttribute("userPosts", postService.getPostsByUserId(id));
 //        return "auth/posts/profile";
 //    }
-    @GetMapping("/{id}")
-    public String getProfile(Model model, @PathVariable("id") int id, @AuthenticationPrincipal PersonDetails personDetails){
-        model.addAttribute("user", userService.getUserById(id));
+    @GetMapping("/user/{username}")
+    public String getProfile(Model model, @PathVariable("username") String username, @AuthenticationPrincipal PersonDetails personDetails){
+        Optional<User> user = userRepos.findByUsername(username);
+        Optional<User> myUser = userRepos.findByUsername(personDetails.getUsername());
+        if (user.isEmpty())
+            return "redirect:/posts";
 
 
-        model.addAttribute("userPosts", postService.getPostsByUserId(id));
+        User userOwn = user.get();
+        model.addAttribute("user", userOwn);
 
-        Optional<User> user = userRepos.findByUsername(personDetails.getUsername());
+        model.addAttribute("userPosts", postService.getPostsByUserId(userOwn.getId()));
 
-        if (user.get().getId() == id) {
-            model.addAttribute("myProfile", true);
-        }else {
-            model.addAttribute("myProfile", false);
+
+        boolean myProfile = false;
+
+        if (personDetails != null) {
+            Optional<User> myUserOpt = userRepos.findByUsername(personDetails.getUsername());
+            if (myUserOpt.isPresent()) {
+                model.addAttribute("myUser", myUserOpt.get());
+                myProfile = Objects.equals(personDetails.getUsername(), username);
+            }
         }
+        model.addAttribute("myUser", myUser.get());
 
-
+        model.addAttribute("myProfile", myProfile);
 
         return "auth/posts/profile";
     }

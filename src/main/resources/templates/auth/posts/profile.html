@@ -27,11 +27,11 @@
                 </button>
                 <div class="user-dropdown">
                     <div class="dropdown-header">
-                        <p class="user-name" th:text="${user.name}">Имя пользователя</p>
-                        <p class="user-username" th:text="'@' + ${user.username}">@username</p>
+                        <p class="user-name" th:text="${myUser.name}">Имя пользователя</p>
+                        <p class="user-username" th:text="'@' + ${myUser.username}">@username</p>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <a th:href="@{/myProfile/{id}(id=${user.getId()})}" class="dropdown-item">
+                    <a th:href="@{/user/{username}(username=${myUser.username})}" class="dropdown-item">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="2"/>
                             <path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
