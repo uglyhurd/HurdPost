@@ -677,7 +677,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius-md);
+    /*border-radius: var(--radius-md);*/
     color: var(--color-gray-700);
     text-decoration: none;
     font-size: 0.9375rem;

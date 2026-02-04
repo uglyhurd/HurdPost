@@ -49,7 +49,7 @@
                         <p class="user-username" th:text="'@' + ${user.username}">@username</p>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <a th:href="@{/myProfile/{id}(id=${user.getId()})}" class="dropdown-item">
+                    <a th:href="@{/{id}(id=${user.getId()})}" class="dropdown-item">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="2"/>
                             <path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -67,8 +67,18 @@
                     <form th:action="@{/logout}" th:method="POST">
                         <input th:href="@{/logout}" class="dropdown-item danger" type="submit" value="Выйти">
 
+<!--                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">-->
+<!--                                <path d="M13 16l4-4-4-4M17 12H9M9 2H5a2 2 0 00-2 2v12a2 2 0 002 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>-->
+<!--                            </svg>-->
+
                         </input>
                     </form>
+
+
+
+                        </input>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -106,7 +116,7 @@
                 <div class="post-header">
                     <img th:src="@{/images/profile.png}" alt="User avatar" class="post-avatar">
                     <div class="post-meta">
-                        <h3 class="post-author" th:text="${post.getUser().getName()}">Имя пользователя</h3>
+                        <a th:href="@{/{id}(id=${post.user.getId()})}" style="text-decoration: none"> <h3 class="post-author" th:text="${post.getUser().getName()}">Имя пользователя</h3></a>
                         <p class="post-time">
                             <span th:text="${#dates.format(post.getCreated_at(), 'dd.MM.yyyy HH:mm')}">01.01.2024 12:00</span>
                         </p>
@@ -124,7 +134,6 @@
                     <p th:text="${post.getContent()}">Содержимое поста...</p>
                 </div>
 
-                <!-- Media content (if exists) -->
                 <div class="post-media" th:if="${post.getImage_url() != null && !post.getImage_url().isEmpty()}">
                     <img th:src="${post.getImage_url()}" alt="Post image">
                 </div>
