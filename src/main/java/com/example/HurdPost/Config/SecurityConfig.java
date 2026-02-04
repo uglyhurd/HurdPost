@@ -31,7 +31,11 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(
             authorize -> authorize.requestMatchers("/adminPage").hasRole("ADMIN")
+
                     .requestMatchers("/auth/**", "/error", "/style/style.css" ).permitAll()
+
+                    .requestMatchers("/auth/**", "/error", "/style/style.css").permitAll()
+
                     .anyRequest().hasAnyRole("ADMIN", "MODERATOR", "USER")
         ).formLogin(
                 login -> login.loginPage("/auth/login").loginProcessingUrl("/process_login")

@@ -16,7 +16,7 @@
         </div>
 
         <nav class="header-nav">
-            <a href="#" class="nav-link active">
+            <a href="/posts" class="nav-link active">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor"/>
                 </svg>
@@ -32,12 +32,12 @@
         </nav>
 
         <div class="header-right">
-            <button class="btn btn-new-post">
+            <a th:href="@{/createPost}" class="btn btn-new-post">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
                 Создать
-            </button>
+            </a>
 
             <div class="user-menu">
                 <button class="user-avatar">
@@ -66,9 +66,15 @@
                     <div class="dropdown-divider"></div>
                     <form th:action="@{/logout}" th:method="POST">
                         <input th:href="@{/logout}" class="dropdown-item danger" type="submit" value="Выйти">
+
 <!--                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">-->
 <!--                                <path d="M13 16l4-4-4-4M17 12H9M9 2H5a2 2 0 00-2 2v12a2 2 0 002 2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>-->
 <!--                            </svg>-->
+
+                        </input>
+                    </form>
+
+
 
                         </input>
                     </form>
@@ -92,7 +98,7 @@
         </div>
 
         <!-- Empty state -->
-        <div class="empty-state">
+        <div class="empty-state" th:if="${allPosts.isEmpty()}">
             <div class="empty-icon">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
                     <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="3" opacity="0.2"/>
@@ -101,43 +107,67 @@
             </div>
             <h3>Здесь пока пусто</h3>
             <p>Будьте первым, кто создаст пост!</p>
-            <button class="btn btn-primary">Создать первый пост</button>
+            <a class="btn btn-primary" th:href="@{/createPost}">Создать первый пост</a>
         </div>
 
-        <!-- Post cards will be dynamically loaded here -->
-        <!-- Example post card structure for future use:
-        <article class="post-card">
-            <div class="post-header">
-                <img src="/images/profile.png" alt="User" class="post-avatar">
-                <div class="post-meta">
-                    <h3 class="post-author">Имя пользователя</h3>
-                    <p class="post-time">2 часа назад</p>
+        <!-- Post cards -->
+        <div th:each="post : ${allPosts}">
+            <article class="post-card">
+                <div class="post-header">
+                    <img th:src="@{/images/profile.png}" alt="User avatar" class="post-avatar">
+                    <div class="post-meta">
+                        <a th:href="@{}"> <h3 class="post-author" th:text="${post.getUser().getName()}">Имя пользователя</h3></a>
+                        <p class="post-time">
+                            <span th:text="${#dates.format(post.getCreated_at(), 'dd.MM.yyyy HH:mm')}">01.01.2024 12:00</span>
+                        </p>
+                    </div>
+                    <button class="post-menu-btn" th:attr="data-post-id=${post.getId()}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="6" r="1.5" fill="currentColor"/>
+                            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                            <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+                        </svg>
+                    </button>
                 </div>
-            </div>
-            <div class="post-content">
-                <p>Содержимое поста...</p>
-            </div>
-            <div class="post-actions">
-                <button class="action-btn">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 17l-6-6h4V3h4v8h4l-6 6z" fill="currentColor"/>
-                    </svg>
-                    <span>12</span>
-                </button>
-                <button class="action-btn">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M7 9l3 3 6-6" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    <span>45</span>
-                </button>
-                <button class="action-btn">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M17 8h-6l2-4H6L4 12h6l-2 4z" fill="currentColor"/>
-                    </svg>
-                </button>
-            </div>
-        </article>
-        -->
+
+                <div class="post-content">
+                    <p th:text="${post.getContent()}">Содержимое поста...</p>
+                </div>
+
+                <div class="post-media" th:if="${post.getImage_url() != null && !post.getImage_url().isEmpty()}">
+                    <img th:src="${post.getImage_url()}" alt="Post image">
+                </div>
+
+                <div class="post-media" th:if="${post.getVideo_url() != null && !post.getVideo_url().isEmpty()}">
+                    <video controls th:src="${post.getVideo_url()}">
+                        Ваш браузер не поддерживает видео.
+                    </video>
+                </div>
+
+                <div class="post-actions">
+                    <button class="action-btn like-btn" th:attr="data-post-id=${post.getId()}">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 17.5l-1.5-1.4C4.4 12.5 2 10.3 2 7.5 2 5.5 3.5 4 5.5 4c1.5 0 2.9.9 3.5 2.3C9.6 4.9 11 4 12.5 4 14.5 4 16 5.5 16 7.5c0 2.8-2.4 5-6.5 8.6L10 17.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        <span th:text="${post.getLikes() != null ? post.getLikes().size() : 0}">0</span>
+                    </button>
+
+                    <button class="action-btn comment-btn" th:attr="data-post-id=${post.getId()}">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M18 10c0 4.4-3.6 8-8 8-1.4 0-2.7-.4-3.8-1L2 18l1-4.2C2.4 12.7 2 11.4 2 10c0-4.4 3.6-8 8-8s8 3.6 8 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        <span th:text="${post.getComments() != null ? post.getComments().size() : 0}">0</span>
+                    </button>
+
+                    <button class="action-btn share-btn" th:attr="data-post-id=${post.getId()}">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M15 6a3 3 0 100-6 3 3 0 000 6zM5 13a3 3 0 100-6 3 3 0 000 6zM15 20a3 3 0 100-6 3 3 0 000 6zM7.59 11.51l4.82 2.98M12.41 4.51L7.59 7.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Поделиться</span>
+                    </button>
+                </div>
+            </article>
+        </div>
     </div>
 
     <!-- Sidebar -->
@@ -165,15 +195,81 @@
 
 <script>
     // User menu dropdown
-    document.querySelector('.user-avatar').addEventListener('click', function() {
-        document.querySelector('.user-dropdown').classList.toggle('show');
+    const userAvatar = document.querySelector('.user-avatar');
+    const userDropdown = document.querySelector('.user-dropdown');
+
+    if (userAvatar && userDropdown) {
+        userAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                userDropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // Like button animation
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('svg path');
+
+            if (this.classList.contains('active')) {
+                icon.style.fill = '#ec4899';
+                icon.style.stroke = '#ec4899';
+
+                // Add heart animation
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            } else {
+                icon.style.fill = 'none';
+                icon.style.stroke = 'currentColor';
+            }
+        });
     });
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-menu')) {
-            document.querySelector('.user-dropdown').classList.remove('show');
-        }
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Share button
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+
+            // Copy link animation
+            this.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M7 10l3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Скопировано!</span>
+            `;
+
+            setTimeout(() => {
+                this.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M15 6a3 3 0 100-6 3 3 0 000 6zM5 13a3 3 0 100-6 3 3 0 000 6zM15 20a3 3 0 100-6 3 3 0 000 6zM7.59 11.51l4.82 2.98M12.41 4.51L7.59 7.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Поделиться</span>
+                `;
+            }, 2000);
+        });
+    });
+
+    // Animate posts on load
+    const posts = document.querySelectorAll('.post-card');
+    posts.forEach((post, index) => {
+        post.style.animationDelay = `${index * 0.1}s`;
     });
 </script>
 </body>
