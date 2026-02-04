@@ -49,7 +49,7 @@
                         <p class="user-username" th:text="'@' + ${user.username}">@username</p>
                     </div>
                     <div class="dropdown-divider"></div>
-                    <a th:href="@{/myProfile/{id}(id=${user.getId()})}" class="dropdown-item">
+                    <a th:href="@{/{id}(id=${user.getId()})}" class="dropdown-item">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="2"/>
                             <path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -116,7 +116,7 @@
                 <div class="post-header">
                     <img th:src="@{/images/profile.png}" alt="User avatar" class="post-avatar">
                     <div class="post-meta">
-                        <a th:href="@{}"> <h3 class="post-author" th:text="${post.getUser().getName()}">Имя пользователя</h3></a>
+                        <a th:href="@{/{id}(id=${post.user.getId()})}" style="text-decoration: none"> <h3 class="post-author" th:text="${post.getUser().getName()}">Имя пользователя</h3></a>
                         <p class="post-time">
                             <span th:text="${#dates.format(post.getCreated_at(), 'dd.MM.yyyy HH:mm')}">01.01.2024 12:00</span>
                         </p>

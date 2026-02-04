@@ -43,12 +43,31 @@ public class HiController {
         return "auth/posts/posts";
     }
 
-    @GetMapping("/myProfile/{id}")
-    public String getProfile(@PathVariable("id") int id, Model model){
-
+//    @GetMapping("/myProfile/{id}")
+//    public String myProfile(@PathVariable("id") int id, Model model){
+//
+//        model.addAttribute("user", userService.getUserById(id));
+//
+//        model.addAttribute("userPosts", postService.getPostsByUserId(id));
+//        return "auth/posts/profile";
+//    }
+    @GetMapping("/{id}")
+    public String getProfile(Model model, @PathVariable("id") int id, @AuthenticationPrincipal PersonDetails personDetails){
         model.addAttribute("user", userService.getUserById(id));
 
+
         model.addAttribute("userPosts", postService.getPostsByUserId(id));
+
+        Optional<User> user = userRepos.findByUsername(personDetails.getUsername());
+
+        if (user.get().getId() == id) {
+            model.addAttribute("myProfile", true);
+        }else {
+            model.addAttribute("myProfile", false);
+        }
+
+
+
         return "auth/posts/profile";
     }
 
