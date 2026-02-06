@@ -66,10 +66,10 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "follower")
-    private List<Follower> follower = new ArrayList<>();
+    private List<Follower> follower = new ArrayList<>(); // Твои подписчики
 
     @OneToMany(mappedBy = "following")
-    private List<Follower> following = new ArrayList<>();
+    private List<Follower> following = new ArrayList<>(); // Твои подписки
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();

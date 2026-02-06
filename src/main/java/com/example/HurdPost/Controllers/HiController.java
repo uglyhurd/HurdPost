@@ -4,6 +4,7 @@ import com.example.HurdPost.Models.Post;
 import com.example.HurdPost.Models.User;
 import com.example.HurdPost.Repositories.UserRepos;
 import com.example.HurdPost.Security.PersonDetails;
+import com.example.HurdPost.Services.FollowerService;
 import com.example.HurdPost.Services.PostService;
 import com.example.HurdPost.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class HiController {
     private final UserService userService;
     private final UserRepos userRepos;
     private final PostService postService;
+    private final FollowerService followerService;
     @Autowired
-    public HiController(UserService userService, UserRepos userRepos, PostService postService) {
+    public HiController(UserService userService, UserRepos userRepos, PostService postService, FollowerService followerService) {
         this.userService = userService;
         this.userRepos = userRepos;
         this.postService = postService;
+        this.followerService = followerService;
     }
 
 
@@ -79,6 +82,8 @@ public class HiController {
 
         model.addAttribute("myProfile", myProfile);
 
+
+
         return "auth/posts/profile";
     }
 
@@ -103,6 +108,20 @@ public class HiController {
         postService.savePost(post);
 
         return "redirect:/posts";
+    }
+
+    @PostMapping("/user/follow/{id}")
+    public String followOn(Model model, @AuthenticationPrincipal PersonDetails personDetails,
+                           @PathVariable("id") long id) {
+
+        User ownUsername = userService.getUserById(id);
+
+        Optional<User> follower = userRepos.findByUsername(personDetails.getUsername());
+
+//        follower.ifPresent(user -> followerService.followOnUser(user.getId(), id));
+
+        follower.ifPresent(user -> followerService.followOnUser(user.getId(), id));
+        return "redirect:/user/" + ownUsername.getUsername();
     }
 
 
