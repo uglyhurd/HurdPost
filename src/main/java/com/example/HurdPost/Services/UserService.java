@@ -36,8 +36,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User getUserById(int id){
-       Optional<User> user = userRepos.findById(id);
+    public User getUserById(long id){
+       Optional<User> user = userRepos.findById((int) id);
        if (user.isPresent())
            return user.get();
        return new User();

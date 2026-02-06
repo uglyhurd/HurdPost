@@ -25,6 +25,12 @@ public class Follower {
     @CreationTimestamp
     private Date created_at;
 
+    public Follower(User follower, User following) {
+        this.follower = follower;
+        this.following = following;
+        this.created_at = new Date();
+    }
+
     public long getId() {
         return id;
     }
