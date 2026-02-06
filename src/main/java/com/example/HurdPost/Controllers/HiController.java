@@ -61,16 +61,11 @@ public class HiController {
         Optional<User> myUser = userRepos.findByUsername(personDetails.getUsername());
         if (user.isEmpty())
             return "redirect:/posts";
-
-
         User userOwn = user.get();
         model.addAttribute("user", userOwn);
 
         model.addAttribute("userPosts", postService.getPostsByUserId(userOwn.getId()));
-
-
         boolean myProfile = false;
-
         if (personDetails != null) {
             Optional<User> myUserOpt = userRepos.findByUsername(personDetails.getUsername());
             if (myUserOpt.isPresent()) {
@@ -78,10 +73,22 @@ public class HiController {
                 myProfile = Objects.equals(personDetails.getUsername(), username);
             }
         }
-        model.addAttribute("myUser", myUser.get());
-
+        User youUser = myUser.get();
+        model.addAttribute("myUser", youUser);
         model.addAttribute("myProfile", myProfile);
+        if(followerService.checkFollow(youUser.getId(), userOwn.getId()))
+            model.addAttribute("isFollow", true);
+        else{
+            model.addAttribute("isFollow", false);
+        }
 
+
+        model.addAttribute("countFollowing", youUser.getFollower().size());
+        model.addAttribute("countFollower", youUser.getFollowing().size());
+
+
+        model.addAttribute("countFollowerOwn", userOwn.getFollowing().size());
+        model.addAttribute("countFollowingOwn", userOwn.getFollower().size());
 
 
         return "auth/posts/profile";
@@ -111,7 +118,7 @@ public class HiController {
     }
 
     @PostMapping("/user/follow/{id}")
-    public String followOn(Model model, @AuthenticationPrincipal PersonDetails personDetails,
+    public String followOn(@AuthenticationPrincipal PersonDetails personDetails,
                            @PathVariable("id") long id) {
 
         User ownUsername = userService.getUserById(id);
@@ -121,6 +128,16 @@ public class HiController {
 //        follower.ifPresent(user -> followerService.followOnUser(user.getId(), id));
 
         follower.ifPresent(user -> followerService.followOnUser(user.getId(), id));
+        return "redirect:/user/" + ownUsername.getUsername();
+    }
+    @PostMapping("/user/unfollow/{id}")
+    public String unfollow(@AuthenticationPrincipal PersonDetails personDetails,
+                           @PathVariable("id") long id) {
+        User ownUsername = userService.getUserById(id);
+
+        Optional<User> youUser = userRepos.findByUsername(personDetails.getUsername());
+        youUser.ifPresent(user -> followerService.unFollow(user.getId(), id));
+
         return "redirect:/user/" + ownUsername.getUsername();
     }
 
