@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
 
         return new PersonDetails(user.get());
     }
-
     @Transactional
     public User getUserById(long id){
        Optional<User> user = userRepos.findById((int) id);

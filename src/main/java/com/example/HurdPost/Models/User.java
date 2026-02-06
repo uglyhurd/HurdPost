@@ -78,6 +78,7 @@ public class User {
         return follower;
     }
 
+
     public User(long id, String name, String username, String password,
                 String email, String profilePictureUrl, String bio,
                 Date created_at, String role, List<Follower> follower,
