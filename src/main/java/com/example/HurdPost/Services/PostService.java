@@ -40,4 +40,9 @@ public class PostService {
 
     }
 
+    @Transactional
+    public void deletePostById(long id){
+        postRepos.deleteById((int) id);
+    }
+
 }

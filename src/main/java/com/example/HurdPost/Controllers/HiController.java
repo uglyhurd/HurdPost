@@ -141,5 +141,13 @@ public class HiController {
         return "redirect:/user/" + ownUsername.getUsername();
     }
 
+    @PostMapping("/posts/deletePost/{id}")
+    public String deletePost(@PathVariable("id") long id, @AuthenticationPrincipal PersonDetails personDetails ){
+        Optional<User> user = userRepos.findByUsername(personDetails.getUsername());
+
+        postService.deletePostById(id);
+        return "redirect:/user/"+user.get().getUsername();
+    }
+
 
 }
